@@ -1,9 +1,10 @@
 package com.chuadatten.user.otp;
 
 import com.chuadatten.user.common.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
-import java.time.ZonedDateTime;
 import java.util.Random;
 import java.util.UUID;
 
@@ -13,11 +14,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class OtpModel {
+    @JsonIgnore
     private final Random random = new Random();
     private String otp;
     private OtpType otpType;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime expiredAt;
     private UUID userId;
     private String email;
     private Status status;
@@ -25,8 +25,6 @@ public class OtpModel {
     public void generateOtp() {
         int intOtp = this.random.nextInt(900000) + 100000;
         this.otp = String.valueOf(intOtp);
-        this.createdAt = ZonedDateTime.now();
-        this.expiredAt = this.createdAt.plusMinutes(5L);
         this.status = Status.ACTIVE;
     }
 

@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "delete_kyc_requests")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

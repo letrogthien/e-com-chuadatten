@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "audit_logs")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

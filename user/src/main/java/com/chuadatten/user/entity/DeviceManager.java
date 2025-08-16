@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "device_manager")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

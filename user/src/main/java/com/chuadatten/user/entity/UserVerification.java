@@ -2,19 +2,18 @@ package com.chuadatten.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.chuadatten.user.common.Status;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "user_verifications")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 public class UserVerification {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,7 +25,8 @@ public class UserVerification {
     private UserInf user;
 
     @Column(name = "verification_status", nullable = false, length = 20)
-    private String verificationStatus;
+    @Enumerated(EnumType.STRING)
+    private Status verificationStatus;
 
     @Column(name = "face_id_url", length = 255)
     private String faceIdFrontUrl;
@@ -43,11 +43,15 @@ public class UserVerification {
     @Column(name = "verified_at")
     private LocalDateTime verifiedAt;
 
-    @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        this.verificationStatus= Status.PENDING;
+    }
 }
