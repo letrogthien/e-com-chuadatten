@@ -1,18 +1,34 @@
 package com.chuadatten.user.services;
 
 import com.chuadatten.user.common.RoleName;
+import com.chuadatten.user.common.Status;
+import com.chuadatten.user.dto.UserInfDto;
 import com.chuadatten.user.responses.ApiResponse;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+
 public interface AdminService {
+    /*
+     * Get all users
+     * 
+     */
+    ApiResponse<Page<UserInfDto>> getUserList(int page, int size, Status status);
+
+    /*
+     * Get user
+     * @Param userId
+     * @return UserInfDto
+     */
+    ApiResponse<UserInfDto> getUser(UUID userId);
 
     /**
      * Approves a user's registration or application.
      *
      * @param userId the ID of the user to approve
      * @return ApiResponse containing a success or failure message
-     */
+     */     
     ApiResponse<String> approveUser(UUID userId);
 
     /**
@@ -47,4 +63,14 @@ public interface AdminService {
      * @return ApiResponse containing a success or failure message
      */
     ApiResponse<String> setRoleForUser(UUID userId, RoleName roleName);
+
+
+    /**
+     * Change status seller of user.
+     * 
+     * @Param userId
+     * @Param status
+     * @return ApiResponse containing a success or failure message
+     */
+    ApiResponse<UserInfDto> changeStatusSeller(UUID userId, Status status);
 }

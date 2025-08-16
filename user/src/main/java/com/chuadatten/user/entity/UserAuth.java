@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.chuadatten.user.common.Status;
 
@@ -14,11 +13,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "user_auth")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 public class UserAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,13 +35,13 @@ public class UserAuth {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    private Status status = Status.ACTIVE;
+    private Status status ;
 
     @Column(name = "two_factor_enabled")
-    private Boolean twoFactorEnabled = false;
+    private Boolean twoFactorEnabled;
 
     @Column(name = "is_kyc")
-    private Boolean isKyc = false;
+    private Boolean isKyc;
 
     @Column(name = "two_factor_secret")
     private String twoFactorSecret;
@@ -59,9 +58,6 @@ public class UserAuth {
     private LocalDateTime lastLoginAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AuditLog> auditLogs ;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LoginHistory> loginHistories ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -70,25 +66,16 @@ public class UserAuth {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles ;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserInf> userInfs ;
+    @PrePersist
+    void prePersist() {
+        this.status = Status.INACTIVE;
+        this.twoFactorEnabled = false;
+        this.isKyc = false;
+        this.createdAt = LocalDateTime.now();
+    }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Preference> preferences ;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Transaction> transactions ;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserVerification> userVerifications ;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DeleteKycRequest> deleteKycRequests ;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SellerApplication> sellerApplications ;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BillingAddress> billingAddresses ;
-
+    @PreUpdate
+    void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

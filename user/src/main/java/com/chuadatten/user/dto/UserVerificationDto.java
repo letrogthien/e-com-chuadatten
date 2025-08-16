@@ -17,8 +17,6 @@ public class UserVerificationDto {
     private UUID userId;
     private String verificationStatus;
     private String faceIdFrontUrl;
-    private String faceIdBackUrl;
-    private String faceIdSmileUrl;
     private String documentFrontUrl;
     private String documentBackUrl;
     private Integer version;

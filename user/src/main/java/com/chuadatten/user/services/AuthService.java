@@ -107,7 +107,7 @@ public interface AuthService {
     ApiResponse<String> trustDevice(String deviceName, String deviceType, UUID userId);
 
     /**
-     * Activates a user account using the provided activation token.
+     * Activates a user account using the provided activation token
      *
      * @param token the activation token
      * @return ApiResponse containing a success or failure message

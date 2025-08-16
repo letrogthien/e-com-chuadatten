@@ -20,7 +20,18 @@ public enum ErrorCode {
     ACCESS_DENIED("E010", "Access denied", HttpStatus.FORBIDDEN),
     INVALID_INPUT("E011", "Invalid input", HttpStatus.BAD_REQUEST),
     NOT_FOUND("E012", "Not found", HttpStatus.NOT_FOUND), 
-    NOT_KYC("E013", "Not KYC", HttpStatus.BAD_REQUEST),
+    NOT_KYC("E013", "Not KYC", HttpStatus.BAD_REQUEST), 
+    CREATE_DIRECTORY_FAILED("E014", "Create directory failed", HttpStatus.INTERNAL_SERVER_ERROR), 
+    FILE_UPLOAD_FAILED("E015", "File upload failed", HttpStatus.INTERNAL_SERVER_ERROR), 
+    FILE_NOT_FOUND("E016", "File not found", HttpStatus.NOT_FOUND), 
+    CANT_READ_FILE("E017", "Can't read file", HttpStatus.INTERNAL_SERVER_ERROR), 
+    FILE_EMPTY("E018", "File is empty", HttpStatus.BAD_REQUEST), 
+    FILE_TOO_BIG("E019", "File too big", HttpStatus.BAD_REQUEST), 
+    VERIFICATION_NOT_EXIST("E020", "Verification not exist", HttpStatus.BAD_REQUEST), 
+    TRANSACTION_NOT_FOUND("E021", "Transaction not found", HttpStatus.NOT_FOUND), 
+    INVALID_REQUEST("E022", "Invalid request", HttpStatus.BAD_REQUEST), 
+     PREFERENCE_NOT_FOUND("E023", "Preference not found", HttpStatus.NOT_FOUND), 
+     BILLING_ADDRESS_NOT_FOUND("E024", "Billing address not found", HttpStatus.NOT_FOUND),
     ;
 
     private final String code;

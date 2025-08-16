@@ -127,6 +127,7 @@ VALUES (uuid_to_bin(uuid()), 'ROLE_USER', 'Standard user role'),
 DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles`
 (
+    `id`          binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),
     `user_id` binary(16) NOT NULL,
     `role_id` binary(16) NOT NULL,
     PRIMARY KEY (`user_id`, `role_id`),

@@ -10,7 +10,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "billing_address")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

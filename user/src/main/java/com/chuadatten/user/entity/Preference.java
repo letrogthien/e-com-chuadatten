@@ -10,7 +10,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "preferences")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,13 +24,13 @@ public class Preference {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserAuth user;
+    private UserInf user;
 
     @Column(name = "notification_email")
-    private Boolean notificationEmail = true;
+    private Boolean notificationEmail ;
 
     @Column(name = "notification_push")
-    private Boolean notificationPush = true;
+    private Boolean notificationPush;
 
     @Column(name = "preferred_currency", length = 10)
     private String preferredCurrency;
@@ -38,7 +39,7 @@ public class Preference {
     private String preferredPlatform;
 
     @Column(name = "privacy_public_profile")
-    private Boolean privacyPublicProfile = true;
+    private Boolean privacyPublicProfile;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -47,4 +48,13 @@ public class Preference {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.notificationEmail = true;
+        this.notificationPush = true;
+        this.preferredCurrency = "USD";
+        this.privacyPublicProfile = true;
+    }
 }

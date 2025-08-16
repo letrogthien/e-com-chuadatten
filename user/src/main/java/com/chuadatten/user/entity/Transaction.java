@@ -11,7 +11,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,7 +25,7 @@ public class Transaction {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserAuth user;
+    private UserInf user;
 
     @Column(name = "product_id", columnDefinition = "BINARY(16)")
     private UUID productId;

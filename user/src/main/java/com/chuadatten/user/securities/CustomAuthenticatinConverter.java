@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.chuadatten.user.common.TokenType;
 import com.chuadatten.user.entity.UserAuth;
 import com.chuadatten.user.exceptions.CustomException;
 import com.chuadatten.user.exceptions.ErrorCode;
