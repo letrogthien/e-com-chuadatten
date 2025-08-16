@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "password_history")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

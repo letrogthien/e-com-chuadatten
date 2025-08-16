@@ -19,12 +19,10 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     Page<AuditLog> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
     @Query("SELECT al FROM AuditLog al WHERE " +
-           "(:userId IS NULL OR al.user.id = :userId) AND " +
            "(:action IS NULL OR al.action LIKE CONCAT('%', :action, '%')) AND " +
            "(:startDate IS NULL OR al.createdAt >= :startDate) AND " +
            "(:endDate IS NULL OR al.createdAt <= :endDate)")
     Page<AuditLog> findByFilters(
-        @Param("userId") UUID userId,
         @Param("action") String action,
         @Param("startDate") LocalDateTime startDate,
         @Param("endDate") LocalDateTime endDate,

@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "seller_ratings")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -41,4 +42,6 @@ public class SellerRating {
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    
 }

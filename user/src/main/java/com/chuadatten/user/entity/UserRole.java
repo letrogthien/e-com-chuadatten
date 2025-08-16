@@ -9,7 +9,8 @@ import java.util.UUID;
        uniqueConstraints = {
            @UniqueConstraint(columnNames = {"user_id", "role_id"})
        })
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

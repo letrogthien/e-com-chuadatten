@@ -1,16 +1,20 @@
 package com.chuadatten.user.repository;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.chuadatten.user.common.Status;
 import com.chuadatten.user.entity.UserInf;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface UserInfRepository extends JpaRepository<UserInf, UUID> {
     Optional<UserInf> findByEmail(String email);
     boolean existsByEmail(String email);
-    Optional<UserInf> findByUserId(UUID userId);
+    Page<UserInf> findAllByStatus(Status status, Pageable pageable);
+
 }

@@ -1,13 +1,11 @@
 package com.chuadatten.user.redis.services;
 
-import com.chuadatten.user.common.Status;
 import com.chuadatten.user.otp.OtpModel;
 import com.chuadatten.user.otp.OtpType;
 import com.chuadatten.user.redis.OtpRedisTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -30,10 +28,6 @@ public class OtpModelCacheService {
         String key = this.generateOtpCacheKey(userId, otp, otpType);
         OtpModel otpModel = this.redisTemplate.opsForValue().get(key);
         if (otpModel == null) {
-            return false;
-        }
-        if (otpModel.getExpiredAt().isBefore(ZonedDateTime.now())||otpModel.getStatus() != Status.ACTIVE) {
-            this.redisTemplate.delete(key);
             return false;
         }
         this.redisTemplate.delete(key);

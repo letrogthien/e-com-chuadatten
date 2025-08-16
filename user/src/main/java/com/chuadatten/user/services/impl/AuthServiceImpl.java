@@ -6,12 +6,24 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.chuadatten.event.OtpEvent;
+import com.chuadatten.event.PasswordResetEvent;
+import com.chuadatten.event.StrangeDevice;
 import com.chuadatten.user.anotation.CusAuditable;
 import com.chuadatten.user.common.ConstString;
 import com.chuadatten.user.common.RoleName;
 import com.chuadatten.user.common.Status;
 import com.chuadatten.user.common.TokenType;
-import com.chuadatten.user.entity.*;
+import com.chuadatten.user.entity.DeviceManager;
+import com.chuadatten.user.entity.PasswordHistory;
+import com.chuadatten.user.entity.Role;
+import com.chuadatten.user.entity.UserAuth;
+import com.chuadatten.user.entity.UserInf;
+import com.chuadatten.user.entity.UserRole;
+import com.chuadatten.user.entity.WhiteList;
 import com.chuadatten.user.exceptions.CustomException;
 import com.chuadatten.user.exceptions.ErrorCode;
 import com.chuadatten.user.jwt.JwtUtils;
@@ -22,7 +34,12 @@ import com.chuadatten.user.outbox.RegisterOutBox;
 import com.chuadatten.user.outbox.repo.RegisterOutBoxRepository;
 import com.chuadatten.user.redis.services.OtpModelCacheService;
 import com.chuadatten.user.redis.services.WhiteListCacheService;
-import com.chuadatten.user.repository.*;
+import com.chuadatten.user.repository.DeviceManagerRepository;
+import com.chuadatten.user.repository.PasswordHistoryRepository;
+import com.chuadatten.user.repository.RoleRepository;
+import com.chuadatten.user.repository.UserAuthRepository;
+import com.chuadatten.user.repository.UserInfRepository;
+import com.chuadatten.user.repository.UserRoleRepository;
 import com.chuadatten.user.requests.AccessTokenRequest;
 import com.chuadatten.user.requests.ChangePwdRequest;
 import com.chuadatten.user.requests.Disable2FaRequest;
@@ -36,14 +53,10 @@ import com.chuadatten.user.responses.ApiResponse;
 import com.chuadatten.user.responses.LoginResponse;
 import com.chuadatten.user.securities.CustomPasswordEncoder;
 import com.chuadatten.user.services.AuthService;
-import com.chuadatten.event.OtpEvent;
-import com.chuadatten.event.PasswordResetEvent;
-import com.chuadatten.event.StrangeDevice;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +72,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordHistoryRepository passwordHistoryRepository;
     private final DeviceManagerRepository deviceManagerRepository;
     private final RegisterOutBoxRepository registerOutBoxRepository;
+    private final UserInfRepository userInfRepository;
 
     @Override
     @Transactional
@@ -91,8 +105,17 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         user.setUserRoles(Set.of(userRole));
-
         this.userRepository.save(user);
+
+        UserInf userInf = UserInf.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .status(Status.INACTIVE)
+                .isSeller(false)
+                .displayName(user.getUsername())
+                .build();
+
+        this.userInfRepository.save(userInf);
         this.generateRegistrationEventOutBox(user);
 
         return ApiResponse.<String>builder()
@@ -422,14 +445,18 @@ public class AuthServiceImpl implements AuthService {
         if (!this.jwtUtils.isTokenValid(token, TokenType.ACTIVATION_TOKEN)) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
-        String email = this.jwtUtils.extractClaim(token, "email");
-        UserAuth user = this.userRepository.findByEmail(email)
+        String id = this.jwtUtils.extractClaim(token, "id");
+        UserAuth user = this.userRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        UserInf userInf = this.userInfRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         if (user.getStatus() == Status.ACTIVE) {
             return ApiResponse.<String>builder()
                     .message("Account is already active")
                     .build();
         }
+        userInf.setStatus(Status.ACTIVE);
         user.setStatus(Status.ACTIVE);
         this.userRepository.save(user);
         return ApiResponse.<String>builder()
@@ -467,7 +494,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private ApiResponse<String> assignRoleHelper(UUID userId, RoleName roleName) {
-        
+
         UserAuth user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Role role = this.roleRepository.findByName(roleName.name())

@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "send_message_error")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
