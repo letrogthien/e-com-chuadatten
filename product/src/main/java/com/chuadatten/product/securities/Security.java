@@ -1,0 +1,92 @@
+package com.chuadatten.product.securities;
+
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+
+import com.chuadatten.product.common.RoleName;
+
+import lombok.RequiredArgsConstructor;
+
+
+@Configuration
+@RequiredArgsConstructor
+public class Security {
+    private final CustomJwtDecoder jwtDecoder;
+    private final CustomAuthenticatinConverter converter;
+    private final CustomAuthenticationEntryPoint entryPoint;
+    private final GetTokenResolver getTokenResolver;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
+        security.csrf(AbstractHttpConfigurer::disable);
+        configureAuthorizationRules(security);
+        configureSessionManagement(security);
+        configureOAuth2ResourceServer(security);
+        return security.build();
+    }
+
+    private void configureAuthorizationRules(HttpSecurity security) throws Exception {
+        security.authorizeHttpRequests(authorize ->
+            authorize
+                .requestMatchers(
+                    "/api/admin/**",
+                    "/api/v1/auth/assign-role"
+                ).hasAuthority(RoleName.ROLE_ADMIN.name())
+
+                .requestMatchers(
+                    "/api/seller/**"
+                ).hasAnyAuthority(RoleName.ROLE_SELLER.name(), RoleName.ROLE_ADMIN.name())
+
+                .requestMatchers(
+                    "/api/users/me/**",
+                    "/api/kyc/**",
+                    "/api/files/**",
+                    "/api/v1/auth/logout",
+                    "/api/v1/auth/logout-all",
+                    "/api/v1/auth/enable-2fa",
+                    "/api/v1/auth/disable-2fa",
+                    "/api/v1/auth/change-password"
+                ).hasAnyAuthority(RoleName.ROLE_USER.name(), RoleName.ROLE_SELLER.name(), RoleName.ROLE_ADMIN.name())
+
+                .requestMatchers(
+                    "/api/v1/auth/login",
+                    "/api/v1/auth/register",
+                    "/api/v1/auth/verify-2fa",
+                    "/api/v1/auth/trust-device",
+                    "/api/v1/auth/reset-password",
+                    "/api/v1/auth/forgot-password",
+                    "/api/v1/auth/activate-account",
+                    "/api/v1/auth/access-token",
+                    "/api/v1/search/user/name",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/api/v1/oauth2/jwks",
+                    "/api/v1/auth/test"
+                ).permitAll()
+
+                .anyRequest().authenticated()
+        );
+    }
+
+    private void configureSessionManagement(HttpSecurity security) throws Exception {
+        security.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    }
+
+    private void configureOAuth2ResourceServer(HttpSecurity security) throws Exception {
+        security.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                        .decoder(jwtDecoder)
+                        .jwtAuthenticationConverter(converter)
+                )
+                .bearerTokenResolver(getTokenResolver)
+                .authenticationEntryPoint(entryPoint)
+        );
+    }
+
+}
