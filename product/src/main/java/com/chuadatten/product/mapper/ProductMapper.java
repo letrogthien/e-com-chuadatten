@@ -72,4 +72,6 @@ public interface ProductMapper {
      * @return the converted list of ProductImage entities
      */
     List<ProductImage> productImageDtosToProductImages(List<ProductImageDto> imageDtos);
+
+    List<ProductDto> toDtoList(List<Product> all);
 }
