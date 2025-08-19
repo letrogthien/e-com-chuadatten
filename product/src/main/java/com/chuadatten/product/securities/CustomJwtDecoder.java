@@ -1,22 +1,23 @@
 package com.chuadatten.product.securities;
 
-import com.nimbusds.jwt.JWT;
-import com.nimbusds.jwt.JWTParser;
-import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
-import com.chuadatten.product.exceptions.CustomException;
-import com.chuadatten.product.exceptions.ErrorCode;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
+import com.chuadatten.product.exceptions.CustomException;
+import com.chuadatten.product.exceptions.ErrorCode;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTParser;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class CustomJwtDecoder implements JwtDecoder {
-    private final RSAPublicKey publicKey;
 
     public Jwt decode(String token) throws JwtException {
         try {
@@ -35,7 +36,8 @@ public class CustomJwtDecoder implements JwtDecoder {
     }
 
     private JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(this.publicKey).build();
+        return NimbusJwtDecoder.withJwkSetUri("http://localhost:8081/api/v1/oauth2/jwks")
+                .build();
     }
 
     private JwtDecoder googleJwtDecoder() {

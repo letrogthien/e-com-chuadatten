@@ -1,6 +1,8 @@
 package com.chuadatten.product.service;
 
 import com.chuadatten.product.dto.ProductVariantDto;
+import com.chuadatten.product.requests.VariantCreateRq;
+import com.chuadatten.product.requests.VariantUpdateRq;
 import com.chuadatten.product.responses.ApiResponse;
 
 import java.util.List;
@@ -14,21 +16,21 @@ public interface ProductVariantService {
     /**
      * Creates a new product variant.
      * 
-     * @param dto the product variant data transfer object containing variant information
+     * @param request the product variant request object containing variant information
      * @param userId the ID of the user performing the operation
      * @return an ApiResponse containing the created product variant DTO
      */
-    ApiResponse<ProductVariantDto> create(ProductVariantDto dto, String userId);
+    ApiResponse<ProductVariantDto> create(VariantCreateRq request, String userId);
 
     /**
      * Updates an existing product variant.
      * 
      * @param id the ID of the product variant to update
-     * @param dto the product variant data transfer object containing updated information
+     * @param request the product variant request object containing updated information
      * @param userId the ID of the user performing the operation
      * @return an ApiResponse containing the updated product variant DTO
      */
-    ApiResponse<ProductVariantDto> update(String id, ProductVariantDto dto, String userId);
+    ApiResponse<ProductVariantDto> update(String id, VariantUpdateRq request, String userId);
 
     /**
      * Deletes a product variant by its ID.

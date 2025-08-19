@@ -172,4 +172,12 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public ApiResponse<List<ProductDto>> getAll() {
+        return ApiResponse.<List<ProductDto>>builder()   
+        .data(productMapper.toDtoList(productRepository.findAll()))
+        .build();
+
+    }
+
 }

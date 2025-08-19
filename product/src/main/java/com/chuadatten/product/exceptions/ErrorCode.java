@@ -18,7 +18,9 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND("E026", "Category not found", HttpStatus.NOT_FOUND),
     SLUG_EXIST("E027", "Slug exist", HttpStatus.BAD_REQUEST),
     PRODUCT_NOT_FOUND("E028", "Product not found", HttpStatus.NOT_FOUND),
-    U_NOT_HAVE_PERMISSION("E029", "You don't have permission", HttpStatus.FORBIDDEN),
+    U_NOT_HAVE_PERMISSION("E029", "You don't have permission", HttpStatus.FORBIDDEN), 
+    PRODUCT_VARIANT_NOT_FOUND("E030", "Product variant not found", HttpStatus.NOT_FOUND), 
+    PRODUCT_VARIANT_NOT_ENOUGH_QUANTITY("E031", "Product variant not enough quantity", HttpStatus.BAD_REQUEST),
 
     ;
 
