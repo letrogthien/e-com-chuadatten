@@ -70,7 +70,7 @@ public class Security {
                     "/api/v1/auth/test"
                 ).permitAll()
 
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
         );
     }
 

@@ -2,6 +2,8 @@ package com.chuadatten.product.mapper;
 
 import com.chuadatten.product.dto.ProductVariantDto;
 import com.chuadatten.product.entity.ProductVariant;
+import com.chuadatten.product.requests.VariantUpdateRq;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -22,18 +24,7 @@ public interface ProductVariantMapper {
      */
     ProductVariantDto toDto(ProductVariant entity);
 
-    /**
-     * Converts a ProductVariantDto to a ProductVariant entity.
-     * Ignores id, createdAt, and updatedAt fields as they are managed by the database.
-     *
-     * @param dto the ProductVariantDto to convert
-     * @return the converted ProductVariant entity
-     */
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "status", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    ProductVariant toEntity(ProductVariantDto dto);
+
 
     /**
      * Updates an existing ProductVariant entity with values from a ProductVariantDto.
@@ -46,5 +37,5 @@ public interface ProductVariantMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    void update(ProductVariantDto dto, @MappingTarget ProductVariant entity);
+    void update(VariantUpdateRq rq, @MappingTarget ProductVariant entity);
 }

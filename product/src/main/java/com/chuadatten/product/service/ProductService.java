@@ -5,7 +5,9 @@ import com.chuadatten.product.requests.ProductCreateRq;
 import com.chuadatten.product.requests.ProductUpdateRq;
 import com.chuadatten.product.responses.ApiResponse;
 
+import java.util.List;
 
+import org.apache.kafka.shaded.com.google.protobuf.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,4 +91,8 @@ public interface ProductService {
      * @return an ApiResponse indicating the success or failure of the operation
      */
     ApiResponse<ProductDto> addImages(String productId, MultipartFile file, String alt, boolean main, int position);
+
+
+
+    ApiResponse<List<ProductDto>> getAll();
 }
