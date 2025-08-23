@@ -1,9 +1,8 @@
 package com.chuadatten.product.securities;
 
-
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,7 +11,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.chuadatten.product.common.RoleName;
 
 import lombok.RequiredArgsConstructor;
-
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,70 +21,49 @@ public class Security {
     private final GetTokenResolver getTokenResolver;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        security.csrf(AbstractHttpConfigurer::disable);
-        configureAuthorizationRules(security);
-        configureSessionManagement(security);
-        configureOAuth2ResourceServer(security);
-        return security.build();
-    }
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
 
-    private void configureAuthorizationRules(HttpSecurity security) throws Exception {
-        security.authorizeHttpRequests(authorize ->
-            authorize
-                .requestMatchers(
-                    "/api/admin/**",
-                    "/api/v1/auth/assign-role"
-                ).hasAuthority(RoleName.ROLE_ADMIN.name())
+        http.authorizeHttpRequests(auth -> auth
+            // --- Public ---
+            .requestMatchers(HttpMethod.GET, "/api/v1/product-service/products/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/product-service/categories/**").permitAll()
 
-                .requestMatchers(
-                    "/api/seller/**"
-                ).hasAnyAuthority(RoleName.ROLE_SELLER.name(), RoleName.ROLE_ADMIN.name())
+            // --- USER ---
+            .requestMatchers(HttpMethod.POST, "/api/v1/product-service/product-variants/*/reserve").hasAuthority(RoleName.ROLE_USER.name())
+            .requestMatchers(HttpMethod.POST, "/api/v1/product-service/product-variants/*/release").hasAuthority(RoleName.ROLE_USER.name())
+            .requestMatchers(HttpMethod.POST, "/api/v1/product-service/product-variants/*/commit").hasAuthority(RoleName.ROLE_USER.name())
 
-                .requestMatchers(
-                    "/api/users/me/**",
-                    "/api/kyc/**",
-                    "/api/files/**",
-                    "/api/v1/auth/logout",
-                    "/api/v1/auth/logout-all",
-                    "/api/v1/auth/enable-2fa",
-                    "/api/v1/auth/disable-2fa",
-                    "/api/v1/auth/change-password"
-                ).hasAnyAuthority(RoleName.ROLE_USER.name(), RoleName.ROLE_SELLER.name(), RoleName.ROLE_ADMIN.name())
+            // --- SELLER ---
+            .requestMatchers(HttpMethod.POST, "/api/v1/product-service/products").hasAuthority(RoleName.ROLE_SELLER.name())
+            .requestMatchers(HttpMethod.PUT, "/api/v1/product-service/products/*").hasAuthority(RoleName.ROLE_SELLER.name())
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/product-service/products/*").hasAuthority(RoleName.ROLE_SELLER.name())
+            .requestMatchers(HttpMethod.POST, "/api/v1/product-service/products/*/images").hasAuthority(RoleName.ROLE_SELLER.name())
 
-                .requestMatchers(
-                    "/api/v1/auth/login",
-                    "/api/v1/auth/register",
-                    "/api/v1/auth/verify-2fa",
-                    "/api/v1/auth/trust-device",
-                    "/api/v1/auth/reset-password",
-                    "/api/v1/auth/forgot-password",
-                    "/api/v1/auth/activate-account",
-                    "/api/v1/auth/access-token",
-                    "/api/v1/search/user/name",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/api/v1/oauth2/jwks",
-                    "/api/v1/auth/test"
-                ).permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/v1/product-service/product-variants").hasAuthority(RoleName.ROLE_SELLER.name())
+            .requestMatchers(HttpMethod.PUT, "/api/v1/product-service/product-variants/*").hasAuthority(RoleName.ROLE_SELLER.name())
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/product-service/product-variants/*").hasAuthority(RoleName.ROLE_SELLER.name())
 
-                .anyRequest().permitAll()
+            // --- ADMIN ---
+            .requestMatchers("/api/v1/product-service/admin/**").hasAuthority(RoleName.ROLE_ADMIN.name())
+
+            // --- Default ---
+            .anyRequest().authenticated()
         );
-    }
 
-    private void configureSessionManagement(HttpSecurity security) throws Exception {
-        security.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-    }
-
-    private void configureOAuth2ResourceServer(HttpSecurity security) throws Exception {
-        security.oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                        .decoder(jwtDecoder)
-                        .jwtAuthenticationConverter(converter)
-                )
-                .bearerTokenResolver(getTokenResolver)
-                .authenticationEntryPoint(entryPoint)
+        http.sessionManagement(session ->
+            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
-    }
 
+        http.oauth2ResourceServer(oauth2 -> oauth2
+            .jwt(jwt -> jwt
+                .decoder(jwtDecoder)
+                .jwtAuthenticationConverter(converter)
+            )
+            .bearerTokenResolver(getTokenResolver)
+            .authenticationEntryPoint(entryPoint)
+        );
+
+        return http.build();
+    }
 }

@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/files")
+@RequestMapping("/api/v1/user-service/files")
 public class FileUploadController {
 
     private final FileStorageService fileStorageService;

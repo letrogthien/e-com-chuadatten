@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/users/me")
+@RequestMapping("/api/v1/user-service/users/me")
 @RequiredArgsConstructor
 public class UserInforController {
 
