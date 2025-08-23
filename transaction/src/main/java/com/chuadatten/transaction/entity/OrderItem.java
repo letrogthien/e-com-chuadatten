@@ -32,11 +32,12 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(name = "product_id", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID productId;
+    @Column(name = "product_id", nullable = false)
+    private String productId;
 
-    @Column(name = "product_name", nullable = false)
-    private String productName;
+
+    @Column(name = "product_variant_id")
+    private String productVariantId;
 
     @Column(name = "unit_price", nullable = false)
     private BigDecimal unitPrice;

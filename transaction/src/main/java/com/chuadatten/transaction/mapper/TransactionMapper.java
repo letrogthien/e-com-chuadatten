@@ -6,6 +6,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import com.chuadatten.transaction.dto.OrderDisputeDto;
 import com.chuadatten.transaction.dto.OrderDto;
@@ -47,6 +48,9 @@ public interface TransactionMapper {
     @Mapping(target = "orderId", source = "order.id")
     OrderRefundDto toOrderRefundDto(OrderRefund orderRefund);
 
+
+    
+
   
 
     List<OrderRefundDto> toOrderRefundDtoList(List<OrderRefund> orderRefunds);
@@ -56,7 +60,7 @@ public interface TransactionMapper {
 
 
 
-    List<OrderDisputeDto> toOrderDisputeDtoList(List<OrderDispute> orderDisputes);
+    List<OrderDisputeDto> toOrderDisputeDtoList(Page<OrderDispute> disputes);
 
     @Mapping(target = "orderId", source = "order.id")
     OrderLogDto toOrderLogDto(OrderLog orderLog);

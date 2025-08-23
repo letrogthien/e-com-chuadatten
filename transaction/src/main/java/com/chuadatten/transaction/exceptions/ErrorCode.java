@@ -20,7 +20,14 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND("E028", "Product not found", HttpStatus.NOT_FOUND),
     U_NOT_HAVE_PERMISSION("E029", "You don't have permission", HttpStatus.FORBIDDEN), 
     PRODUCT_VARIANT_NOT_FOUND("E030", "Product variant not found", HttpStatus.NOT_FOUND), 
-    PRODUCT_VARIANT_NOT_ENOUGH_QUANTITY("E031", "Product variant not enough quantity", HttpStatus.BAD_REQUEST),
+    PRODUCT_VARIANT_NOT_ENOUGH_QUANTITY("E031", "Product variant not enough quantity", HttpStatus.BAD_REQUEST), 
+    ORDER_NOT_FOUND("E032", "Order not found", HttpStatus.NOT_FOUND), 
+    ORDER_CANNOT_CANCEL("E033", "Order cannot cancel", HttpStatus.BAD_REQUEST), 
+    ORDER_CANNOT_UPLOAD_PROOF("E034", "Order cannot upload proof", HttpStatus.BAD_REQUEST), 
+    ORDER_DISPUTE_ALREADY_OPENED("E035", "Order dispute already opened", HttpStatus.BAD_REQUEST), 
+    DISPUTE_NOT_FOUND("E036", "Dispute not found", HttpStatus.NOT_FOUND), 
+    REFUND_FOR_ORDER_NOT_FOUND("E037", "Refund for order not found", HttpStatus.NOT_FOUND), 
+    ORDER_DISPUTE_NOT_FOUND("E038", "Order dispute not found", HttpStatus.NOT_FOUND),
 
     ;
 

@@ -1,5 +1,4 @@
 package com.chuadatten.transaction.entity;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
@@ -39,9 +39,6 @@ public class OrderRefund {
     @Column(name = "request_by", columnDefinition = "BINARY(16)", nullable = false)
     private UUID requestBy;
 
-    @Column(nullable = false)
-    private BigDecimal amount;
-
     @Enumerated(EnumType.STRING)
     @Column(length = 50, nullable = false)
     private Status status;
@@ -57,4 +54,9 @@ public class OrderRefund {
 
     // Getters & Setters
     // ...
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        status = Status.PENDING;
+    }
 }

@@ -1,10 +1,8 @@
 package com.chuadatten.transaction.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 import com.chuadatten.transaction.common.DisputeIssueType;
 import com.chuadatten.transaction.common.Status;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,9 +13,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Data;
 @Entity
 @Table(name = "order_disputes")
+@Builder
+@Data
 public class OrderDispute {
 
     @Id
@@ -43,10 +46,18 @@ public class OrderDispute {
     @Column(length = 50, nullable = false)
     private Status status;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "resolved_at")
     private LocalDateTime resolvedAt;
+
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        status = Status.OPENED;
+        issueType = DisputeIssueType.OTHER;
+    }
 
 }

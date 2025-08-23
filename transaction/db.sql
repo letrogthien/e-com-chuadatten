@@ -36,8 +36,8 @@ DROP TABLE IF EXISTS order_items;
 CREATE TABLE order_items (
   id            BINARY(16)     NOT NULL,
   order_id      BINARY(16)     NOT NULL,
-  product_id    BINARY(16)     NOT NULL,
-  product_name  VARCHAR(255)   NOT NULL,
+  product_id    VARCHAR(255)   NOT NULL,
+  product_variant_id VARCHAR(255)   NOT NULL,
   unit_price    DECIMAL(18,2)  NOT NULL,
   quantity      INT            NOT NULL CHECK (quantity > 0),
   subtotal      DECIMAL(18,2)  AS (unit_price * quantity) STORED,
@@ -77,7 +77,6 @@ CREATE TABLE order_refunds (
   id             BINARY(16)     NOT NULL,
   order_id       BINARY(16)     NOT NULL,
   request_by     BINARY(16)     NOT NULL,
-  amount         DECIMAL(18,2)  NOT NULL CHECK (amount >= 0),
   status         VARCHAR(50)    NOT NULL DEFAULT 'REQUESTED',
   reason         TEXT           NULL,
   created_at     DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -97,9 +96,9 @@ CREATE TABLE order_disputes (
   id            BINARY(16)   NOT NULL,
   order_id      BINARY(16)   NOT NULL,
   opened_by     BINARY(16)   NOT NULL,
-  issue_type    VARCHAR(50)  NOT NULL DEFAULT 'OTHER', -- NOT_DELIVERED, ITEM_INVALID...
+  issue_type    VARCHAR(50)  NOT NULL,
   description   TEXT         NULL,
-  status        VARCHAR(50)  NOT NULL DEFAULT 'OPEN',
+  status        VARCHAR(50)  NOT NULL ,
   created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   resolved_at   DATETIME     NULL,
 

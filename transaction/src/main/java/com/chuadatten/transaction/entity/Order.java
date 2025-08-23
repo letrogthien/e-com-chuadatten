@@ -16,10 +16,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Data;
 
 @Entity
 @Table(name = "orders")
+@Data
+@Builder
 public class Order {
 
     @Id
@@ -74,6 +79,16 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderLog> logs;
+
+    @PrePersist
+    void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        auditFlag = false;
+        status = Status.CREATED;
+        paymentStatus = Status.PENDING;
+    }
+
 
 
 }

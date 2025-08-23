@@ -17,8 +17,7 @@ import lombok.Getter;
 @Getter
 public class OrderCreateRq {
 
-    @NotNull(message = "Buyer ID is required")
-    private UUID buyerId;
+ 
 
     @NotNull(message = "Seller ID is required")
     private UUID sellerId;

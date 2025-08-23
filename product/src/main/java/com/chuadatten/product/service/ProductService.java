@@ -1,15 +1,14 @@
 package com.chuadatten.product.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.chuadatten.product.dto.ProductDto;
 import com.chuadatten.product.requests.ProductCreateRq;
 import com.chuadatten.product.requests.ProductUpdateRq;
 import com.chuadatten.product.responses.ApiResponse;
-
-import java.util.List;
-
-import org.apache.kafka.shaded.com.google.protobuf.Api;
-import org.springframework.data.domain.Page;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service interface for managing products.

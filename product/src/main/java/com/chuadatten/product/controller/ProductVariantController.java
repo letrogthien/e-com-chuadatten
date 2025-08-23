@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/product-variants")
+@RequestMapping("/api/v1/product-service/product-variants")
 @RequiredArgsConstructor
 public class ProductVariantController {
 

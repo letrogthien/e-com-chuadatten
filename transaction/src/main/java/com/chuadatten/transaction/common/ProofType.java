@@ -3,5 +3,5 @@ package com.chuadatten.transaction.common;
 public enum ProofType {
     SCREENSHOT,
     VIDEO,
-    TEXT_NOTE
+    TEXT_NOTE, DELIVERY
 }

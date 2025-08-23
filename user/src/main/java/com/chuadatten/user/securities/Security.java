@@ -35,39 +35,39 @@ public class Security {
         security.authorizeHttpRequests(authorize ->
             authorize
                 .requestMatchers(
-                    "/api/admin/**",
-                    "/api/v1/auth/assign-role"
+                    "/api/v1/user-service/admin/**",
+                    "/api/v1/user-service/v1/auth/assign-role"
                 ).hasAuthority(RoleName.ROLE_ADMIN.name())
 
                 .requestMatchers(
-                    "/api/seller/**"
+                    "/api/v1/user-service/seller/**"
                 ).hasAnyAuthority(RoleName.ROLE_SELLER.name(), RoleName.ROLE_ADMIN.name())
 
                 .requestMatchers(
-                    "/api/users/me/**",
-                    "/api/kyc/**",
-                    "/api/files/**",
-                    "/api/v1/auth/logout",
-                    "/api/v1/auth/logout-all",
-                    "/api/v1/auth/enable-2fa",
-                    "/api/v1/auth/disable-2fa",
-                    "/api/v1/auth/change-password"
+                    "/api/v1/user-service/users/me/**",
+                    "/api/v1/user-service/kyc/**",
+                    "/api/v1/user-service/files/**",
+                    "/api/v1/user-service/v1/auth/logout",
+                    "/api/v1/user-service/v1/auth/logout-all",
+                    "/api/v1/user-service/v1/auth/enable-2fa",
+                    "/api/v1/user-service/v1/auth/disable-2fa",
+                    "/api/v1/user-service/v1/auth/change-password"
                 ).hasAnyAuthority(RoleName.ROLE_USER.name(), RoleName.ROLE_SELLER.name(), RoleName.ROLE_ADMIN.name())
 
                 .requestMatchers(
-                    "/api/v1/auth/login",
-                    "/api/v1/auth/register",
-                    "/api/v1/auth/verify-2fa",
-                    "/api/v1/auth/trust-device",
-                    "/api/v1/auth/reset-password",
-                    "/api/v1/auth/forgot-password",
-                    "/api/v1/auth/activate-account",
-                    "/api/v1/auth/access-token",
-                    "/api/v1/search/user/name",
+                    "/api/v1/user-service/v1/auth/login",
+                    "/api/v1/user-service/v1/auth/register",
+                    "/api/v1/user-service/v1/auth/verify-2fa",
+                    "/api/v1/user-service/v1/auth/trust-device",
+                    "/api/v1/user-service/v1/auth/reset-password",
+                    "/api/v1/user-service/v1/auth/forgot-password",
+                    "/api/v1/user-service/v1/auth/activate-account",
+                    "/api/v1/user-service/v1/auth/access-token",
+                    "/api/v1/user-service/v1/search/user/name",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
-                    "/api/v1/oauth2/jwks",
-                    "/api/v1/auth/test"
+                    "/api/v1/user-service/v1/oauth2/jwks",
+                    "/api/v1/user-service/v1/auth/test"
                 ).permitAll()
 
                 .anyRequest().authenticated()

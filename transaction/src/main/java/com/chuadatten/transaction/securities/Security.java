@@ -48,7 +48,7 @@ public class Security {
             .requestMatchers("/api/admin/**").hasAuthority(RoleName.ROLE_ADMIN.name())
 
             // --- Default ---
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
         );
 
         http.sessionManagement(session ->

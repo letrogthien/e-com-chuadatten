@@ -1,27 +1,23 @@
 
 package com.chuadatten.transaction.request;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-
-import java.math.BigDecimal;
-import java.util.UUID;
-
 import lombok.Getter;
 
 @Getter
 public class OrderItemUpdateRq {
 
     @NotNull(message = "Order item ID is required")
-    private UUID id;
+    private String id;
 
     @NotNull(message = "Product ID is required")
-    private UUID productId;
+    private String productId;
 
-    @NotBlank(message = "Product name is required")
-    private String productName;
+    private String productVariantId;
 
     @NotNull(message = "Unit price is required")
     @DecimalMin(value = "0.01", message = "Unit price must be greater than 0")

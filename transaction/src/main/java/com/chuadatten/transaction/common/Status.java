@@ -16,7 +16,7 @@ public enum Status {
     VERIFIED,
     NONE,
     SUCCESS,
-    RETRY,;
+    RETRY, CANCELLED, DELIVERED, OPENED, CREATED,;
 
 
 }
