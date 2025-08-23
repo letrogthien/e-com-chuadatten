@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/kyc")
+@RequestMapping("/api/v1/user-service/kyc")
 @RequiredArgsConstructor
 public class KycController {
 
