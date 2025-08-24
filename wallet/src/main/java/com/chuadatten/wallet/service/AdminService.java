@@ -1,0 +1,105 @@
+package com.chuadatten.wallet.service;
+
+import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+
+import com.chuadatten.wallet.dto.BankAccountDto;
+import com.chuadatten.wallet.dto.PaymentDto;
+import com.chuadatten.wallet.dto.WalletDto;
+import com.chuadatten.wallet.dto.WithdrawalRequestDto;
+import com.chuadatten.wallet.responses.ApiResponse;
+
+public interface AdminService {
+
+    /**
+     * Manually adjust wallet balance
+     * @param walletId ID of the wallet
+     * @param amount Adjustment amount (positive to increase, negative to decrease)
+     * @param reason Reason for adjustment
+     * @return ApiResponse containing updated wallet information
+     */
+    ApiResponse<WalletDto> adjustWalletBalance(UUID walletId, Long amount, String reason);
+
+    /**
+     * Override payment status (used during reconciliation)
+     * @param paymentId ID of the payment
+     * @param status New status
+     * @return ApiResponse containing updated payment information
+     */
+    ApiResponse<PaymentDto> forceCompletePayment(UUID paymentId, String status);
+
+    /**
+     * View wallets of all users
+     * @param filters Filter criteria (userId, currency, status, etc.)
+     * @param page Page number
+     * @param size Page size
+     * @return ApiResponse containing paginated list of wallets
+     */
+    ApiResponse<Page<WalletDto>> viewAllWallets(Map<String, Object> filters, int page, int size);
+
+    /**
+     * View all payments
+     * @param filters Filter criteria (userId, status, type, etc.)
+     * @param page Page number
+     * @param size Page size
+     * @return ApiResponse containing paginated list of payments
+     */
+    ApiResponse<Page<PaymentDto>> viewAllPayments(Map<String, Object> filters, int page, int size);
+
+    /**
+     * View all withdrawal requests
+     * @param filters Filter criteria (userId, status, etc.)
+     * @param page Page number
+     * @param size Page size
+     * @return ApiResponse containing paginated list of withdrawal requests
+     */
+    ApiResponse<Page<WithdrawalRequestDto>> viewAllWithdrawals(Map<String, Object> filters, int page, int size);
+
+    /**
+     * Approve withdrawal request
+     * @param withdrawalId ID of the withdrawal request
+     * @return ApiResponse containing updated withdrawal request information
+     */
+    ApiResponse<WithdrawalRequestDto> approveWithdrawal(UUID withdrawalId);
+
+    /**
+     * Reject withdrawal request
+     * @param withdrawalId ID of the withdrawal request
+     * @param reason Reason for rejection
+     * @return ApiResponse containing updated withdrawal request information
+     */
+    ApiResponse<WithdrawalRequestDto> rejectWithdrawal(UUID withdrawalId, String reason);
+
+    /**
+     * View all bank accounts
+     * @param filters Filter criteria (userId, bankCode, etc.)
+     * @param page Page number
+     * @param size Page size
+     * @return ApiResponse containing paginated list of bank accounts
+     */
+    ApiResponse<Page<BankAccountDto>> viewAllBankAccounts(Map<String, Object> filters, int page, int size);
+
+    /**
+     * Lock/unlock bank account
+     * @param accountId ID of the bank account
+     * @param locked Lock status (true = locked, false = unlocked)
+     * @return ApiResponse containing updated bank account information
+     */
+    ApiResponse<BankAccountDto> toggleBankAccountLock(UUID accountId, boolean locked);
+
+    /**
+     * Get system overview statistics
+     * @return ApiResponse containing statistics information
+     */
+    ApiResponse<Map<String, Object>> getSystemStatistics();
+
+    /**
+     * Get list of suspicious transactions (needs investigation)
+     * @param page Page number
+     * @param size Page size
+     * @return ApiResponse containing paginated list of suspicious transactions
+     */
+    ApiResponse<Page<Object>> getSuspiciousTransactions(int page, int size);
+}
