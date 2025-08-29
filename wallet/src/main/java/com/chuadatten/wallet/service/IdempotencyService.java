@@ -58,7 +58,6 @@ public interface IdempotencyService {
     /**
      * Delete old idempotency stores (periodic cleanup)
      * @param daysOld Number of days to delete
-     * @return ApiResponse containing number of deleted records
      */
-    ApiResponse<Integer> cleanupOldRecords(int daysOld);
+    void cleanupOldRecords(int daysOld);
 }

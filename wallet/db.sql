@@ -7,6 +7,7 @@ CREATE TABLE wallets (
   reserved BIGINT NOT NULL DEFAULT 0,  -- total held/reserved
   version BIGINT NOT NULL DEFAULT 0,   -- optimistic concurrency counter
   status TINYINT NOT NULL DEFAULT 1,   -- 1 = active, 0 = disabled
+
   created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   UNIQUE KEY ux_user_currency (user_id, currency),
@@ -60,11 +61,14 @@ CREATE TABLE payments (
   status VARCHAR(30) NOT NULL , -- created/processing/succeeded/failed
   idempotency_key VARCHAR(255) DEFAULT NULL,
   metadata JSON DEFAULT NULL,
+  txn_ref VARCHAR(255) DEFAULT NULL,
   created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  
   KEY idx_user_status (user_id, status),
   KEY ux_payment_provider (provider, provider_payment_id),
-  KEY ux_payment_idempotency (idempotency_key)
+  KEY ux_payment_idempotency (idempotency_key),
+  UNIQUE KEY ux_payment_txnref (txn_ref)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- payment attempts (detailed provider interactions / callbacks)
@@ -108,20 +112,7 @@ CREATE TABLE bank_accounts (
   KEY idx_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- bank_transfers: track external transfer results
-CREATE TABLE bank_transfers (
-  id BINARY(16) NOT NULL PRIMARY KEY,
-  withdrawal_request_id BINARY(16) DEFAULT NULL,
-  provider VARCHAR(50) DEFAULT NULL,
-  provider_transfer_id VARCHAR(255) DEFAULT NULL,
-  amount BIGINT NOT NULL,
-  currency CHAR(3) NOT NULL,
-  status VARCHAR(30) ,
-  provider_response JSON,
-  created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  KEY idx_withdrawal (withdrawal_request_id),
-  KEY ux_provider_transfer (provider, provider_transfer_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 -- idempotency store (optional global mapping)

@@ -21,5 +21,9 @@ public interface PaymentRepository extends BaseRepository<Payment> {
 
     Optional<Payment> findByIdempotencyKey(String idempotencyKey);
 
+    Page<Payment> findAllByUserId(UUID userId, Pageable pageable);
+
+    Optional<Payment> findByTxnRef(String txnRef);
+
 
 }

@@ -16,7 +16,18 @@ public enum Status {
     VERIFIED,
     NONE,
     SUCCESS,
-    RETRY,;
+    RETRY,
+    //payment status
+    CREATED,
+    PROCESSING,
+    SUCCEEDED,
+    FAILED,
+    CANCLED,
+    REFUNDED,
+    
+    ;
+
+
 
 
 }

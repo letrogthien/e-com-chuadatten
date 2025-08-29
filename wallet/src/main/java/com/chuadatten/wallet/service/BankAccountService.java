@@ -1,6 +1,7 @@
 package com.chuadatten.wallet.service;
 
 import com.chuadatten.wallet.dto.BankAccountDto;
+import com.chuadatten.wallet.request.CreateBankAccountRequest;
 import com.chuadatten.wallet.responses.ApiResponse;
 
 import java.util.List;
@@ -12,13 +13,10 @@ public interface BankAccountService {
 
     /**
      * Add a new bank account for user
-     * @param userId ID of the user
-     * @param bankCode Bank code
-     * @param accountNumber Bank account number
-     * @param accountName Account holder name
+     * @param request CreateBankAccountRequest containing user ID, bank code, account number, and account name
      * @return ApiResponse containing added bank account information
      */
-    ApiResponse<BankAccountDto> addBankAccount(UUID userId, String bankCode, String accountNumber, String accountName);
+    ApiResponse<BankAccountDto> addBankAccount(CreateBankAccountRequest request, UUID userId);
 
     /**
      * Get all bank accounts of a user
@@ -73,7 +71,6 @@ public interface BankAccountService {
      * Check if bank account belongs to user
      * @param accountId ID of the bank account
      * @param userId ID of the user
-     * @return ApiResponse containing ownership status
      */
-    ApiResponse<Boolean> isBankAccountOwnedByUser(UUID accountId, UUID userId);
+    boolean isBankAccountOwnedByUser(UUID accountId, UUID userId);
 }
