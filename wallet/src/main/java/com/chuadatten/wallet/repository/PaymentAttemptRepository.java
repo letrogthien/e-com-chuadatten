@@ -9,7 +9,7 @@ import java.util.UUID;
 @Repository
 public interface PaymentAttemptRepository extends BaseRepository<PaymentAttempt> {
 
-    List<PaymentAttempt> findByPaymentId(UUID paymentId);
+    PaymentAttempt findByPaymentId(UUID paymentId);
 
     List<PaymentAttempt> findByPaymentIdOrderByCreatedAtDesc(UUID paymentId);
 }

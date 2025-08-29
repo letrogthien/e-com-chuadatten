@@ -1,17 +1,27 @@
 package com.chuadatten.wallet.entity;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.chuadatten.wallet.common.PaymentType;
 import com.chuadatten.wallet.common.Status;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "payments")
@@ -44,7 +54,7 @@ public class Payment {
     private PaymentType type;
 
     @Column(name = "amount", nullable = false)
-    private Long amount;
+    private int amount;
 
     @Column(name = "currency", nullable = false, columnDefinition = "CHAR(3)")
     private String currency;
@@ -58,6 +68,9 @@ public class Payment {
 
     @Column(name = "metadata", columnDefinition = "JSON")
     private String metadata;
+
+    @Column(name = "txn_ref", length = 255)
+    private String txnRef;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

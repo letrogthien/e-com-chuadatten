@@ -5,30 +5,18 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 
+import com.chuadatten.wallet.common.Status;
 import com.chuadatten.wallet.dto.BankAccountDto;
 import com.chuadatten.wallet.dto.PaymentDto;
 import com.chuadatten.wallet.dto.WalletDto;
 import com.chuadatten.wallet.dto.WithdrawalRequestDto;
+import com.chuadatten.wallet.request.RejectWithdrawalRequest;
 import com.chuadatten.wallet.responses.ApiResponse;
 
 public interface AdminService {
 
-    /**
-     * Manually adjust wallet balance
-     * @param walletId ID of the wallet
-     * @param amount Adjustment amount (positive to increase, negative to decrease)
-     * @param reason Reason for adjustment
-     * @return ApiResponse containing updated wallet information
-     */
-    ApiResponse<WalletDto> adjustWalletBalance(UUID walletId, Long amount, String reason);
 
-    /**
-     * Override payment status (used during reconciliation)
-     * @param paymentId ID of the payment
-     * @param status New status
-     * @return ApiResponse containing updated payment information
-     */
-    ApiResponse<PaymentDto> forceCompletePayment(UUID paymentId, String status);
+
 
     /**
      * View wallets of all users
@@ -38,6 +26,15 @@ public interface AdminService {
      * @return ApiResponse containing paginated list of wallets
      */
     ApiResponse<Page<WalletDto>> viewAllWallets(Map<String, Object> filters, int page, int size);
+
+    /**
+     * Change status of a wallet
+     * @param walletId ID of the wallet to change status
+     * @param status New status to set
+     * @return ApiResponse containing updated wallet details
+     * 
+     * */
+    ApiResponse<WalletDto> changeStatusWallet(UUID walletId, Status status);
 
     /**
      * View all payments
@@ -67,10 +64,10 @@ public interface AdminService {
     /**
      * Reject withdrawal request
      * @param withdrawalId ID of the withdrawal request
-     * @param reason Reason for rejection
+     * @param request RejectWithdrawalRequest containing reason and other rejection information
      * @return ApiResponse containing updated withdrawal request information
      */
-    ApiResponse<WithdrawalRequestDto> rejectWithdrawal(UUID withdrawalId, String reason);
+    ApiResponse<WithdrawalRequestDto> rejectWithdrawal(UUID withdrawalId, RejectWithdrawalRequest request);
 
     /**
      * View all bank accounts
@@ -81,13 +78,6 @@ public interface AdminService {
      */
     ApiResponse<Page<BankAccountDto>> viewAllBankAccounts(Map<String, Object> filters, int page, int size);
 
-    /**
-     * Lock/unlock bank account
-     * @param accountId ID of the bank account
-     * @param locked Lock status (true = locked, false = unlocked)
-     * @return ApiResponse containing updated bank account information
-     */
-    ApiResponse<BankAccountDto> toggleBankAccountLock(UUID accountId, boolean locked);
 
     /**
      * Get system overview statistics

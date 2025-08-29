@@ -31,7 +31,16 @@ public enum ErrorCode {
     TRANSACTION_NOT_FOUND("E021", "Transaction not found", HttpStatus.NOT_FOUND), 
     INVALID_REQUEST("E022", "Invalid request", HttpStatus.BAD_REQUEST), 
      PREFERENCE_NOT_FOUND("E023", "Preference not found", HttpStatus.NOT_FOUND), 
-     BILLING_ADDRESS_NOT_FOUND("E024", "Billing address not found", HttpStatus.NOT_FOUND),
+     BILLING_ADDRESS_NOT_FOUND("E024", "Billing address not found", HttpStatus.NOT_FOUND), 
+     PAYMENT_NOT_FOUND("E025", "Payment not found", HttpStatus.NOT_FOUND), 
+     PAYMENT_PROCESSING("E026", "Payment processing", HttpStatus.BAD_REQUEST), 
+     PAYMENT_SUCCESS("E027", "Payment success", HttpStatus.OK), 
+     PAYMENT_FAILED("E028", "Payment failed", HttpStatus.BAD_REQUEST), 
+     PAYMENT_CANCELED("E029", "Payment canceled", HttpStatus.BAD_REQUEST), 
+     PAYMENT_REFUNDED("E030", "Payment refunded", HttpStatus.BAD_REQUEST), 
+     PAYMENT_CREATED("E031", "Payment created", HttpStatus.CREATED), 
+     PAYMENT_ERROR("E032", "Payment error", HttpStatus.BAD_REQUEST), 
+     PAYMENT_NOT_SUCCEEDED("E032", "Payment not succeeded", HttpStatus.BAD_REQUEST),
     ;
 
     private final String code;
