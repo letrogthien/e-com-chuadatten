@@ -9,11 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateBankAccountRequest {
-
-    private String bankCode;
-
-    private String accountNumber;
-
-    private String accountName;
+public class UpdateWalletStatusRequest {
+    private Integer status;
+    private String reason;
+    private String notes;
 }

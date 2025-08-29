@@ -4,23 +4,19 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 
-import com.chuadatten.wallet.dto.BankTransferDto;
 import com.chuadatten.wallet.dto.WithdrawalRequestDto;
+import com.chuadatten.wallet.request.CreateWithdrawalRequest;
+import com.chuadatten.wallet.request.RejectWithdrawalRequest;
 import com.chuadatten.wallet.responses.ApiResponse;
 
 public interface WithdrawalService {
 
     /**
      * Create a withdrawal request from wallet to bank account
-     * @param userId ID of the user
-     * @param walletId ID of the wallet
-     * @param bankAccountId ID of the bank account
-     * @param amount Withdrawal amount
-     * @param currency Currency type
-     * @param idempotencyKey Idempotency key to avoid duplicates
+     * @param request CreateWithdrawalRequest containing user ID, wallet ID, bank account ID, amount, currency, and idempotency key
      * @return ApiResponse containing withdrawal request information
      */
-    ApiResponse<WithdrawalRequestDto> requestWithdrawal(UUID userId, UUID walletId, UUID bankAccountId, Long amount, String currency, String idempotencyKey);
+    ApiResponse<WithdrawalRequestDto> requestWithdrawal(CreateWithdrawalRequest request);
 
     /**
      * Get withdrawal status (pending/processing/completed/failed)
@@ -55,10 +51,10 @@ public interface WithdrawalService {
     /**
      * Reject withdrawal request (admin function)
      * @param withdrawalId ID of the withdrawal request
-     * @param reason Reason for rejection
+     * @param request RejectWithdrawalRequest containing reason and other rejection information
      * @return ApiResponse containing updated withdrawal request information
      */
-    ApiResponse<WithdrawalRequestDto> rejectWithdrawal(UUID withdrawalId, String reason);
+    ApiResponse<WithdrawalRequestDto> rejectWithdrawal(UUID withdrawalId, RejectWithdrawalRequest request);
 
     /**
      * Cancel withdrawal request (only applicable when in pending status)
@@ -67,18 +63,6 @@ public interface WithdrawalService {
      */
     ApiResponse<WithdrawalRequestDto> cancelWithdrawal(UUID withdrawalId);
 
-    /**
-     * Get bank transfer information related to withdrawal request
-     * @param withdrawalId ID of the withdrawal request
-     * @return ApiResponse containing bank transfer information
-     */
-    ApiResponse<BankTransferDto> getBankTransfer(UUID withdrawalId);
 
-    /**
-     * Handle callback from bank about transfer status
-     * @param bankTransferId ID of the bank transfer
-     * @param providerResponse Callback data from bank
-     * @return ApiResponse containing updated bank transfer information
-     */
-    ApiResponse<BankTransferDto> handleBankTransferCallback(UUID bankTransferId, String providerResponse);
+
 }
