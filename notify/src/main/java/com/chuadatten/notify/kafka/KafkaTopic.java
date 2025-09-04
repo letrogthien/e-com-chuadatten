@@ -1,4 +1,4 @@
-package com.chuadatten.user.kafka;
+package com.chuadatten.notify.kafka;
 
 import lombok.Getter;
 @Getter

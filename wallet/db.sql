@@ -126,4 +126,4 @@ CREATE TABLE idempotency_store (
   UNIQUE KEY ux_idemp (idempotency_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INE=InnoDB DEFAULT CHARSET=utf8mb4;
+
